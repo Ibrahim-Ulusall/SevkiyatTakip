@@ -9,7 +9,7 @@ public class Ilce : BaseEntity<int>
     public virtual Sehir Sehir { get; set; } = null!;
     public Ilce()
     {
-        
+
     }
     public Ilce(string name, int sehirId, Sehir sehir)
     {

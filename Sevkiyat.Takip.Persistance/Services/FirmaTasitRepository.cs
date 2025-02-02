@@ -5,9 +5,9 @@ using Sevkiyat.Takip.Persistance.Contexts;
 
 namespace Sevkiyat.Takip.Persistance.Services;
 
-public class SehirRepository : EfRepositoryBase<int, Sehir, SevkiyatContext>, ISehirRepository
+public class FirmaTasitRepository : EfRepositoryBase<int, FirmaTasit, SevkiyatContext>, IFirmaTasitRepository
 {
-    public SehirRepository(SevkiyatContext context) : base(context)
+    public FirmaTasitRepository(SevkiyatContext context) : base(context)
     {
     }
 }

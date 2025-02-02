@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sevkiyat.Takip.Persistance.Contexts;
@@ -11,9 +12,11 @@ using Sevkiyat.Takip.Persistance.Contexts;
 namespace Sevkiyat.Takip.Persistance.Migrations
 {
     [DbContext(typeof(SevkiyatContext))]
-    partial class SevkiyatContextModelSnapshot : ModelSnapshot
+    [Migration("20250202174154_Isletmeler2Migration")]
+    partial class Isletmeler2Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

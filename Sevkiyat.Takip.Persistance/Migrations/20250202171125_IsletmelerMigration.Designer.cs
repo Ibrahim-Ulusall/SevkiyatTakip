@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sevkiyat.Takip.Persistance.Contexts;
@@ -11,9 +12,11 @@ using Sevkiyat.Takip.Persistance.Contexts;
 namespace Sevkiyat.Takip.Persistance.Migrations
 {
     [DbContext(typeof(SevkiyatContext))]
-    partial class SevkiyatContextModelSnapshot : ModelSnapshot
+    [Migration("20250202171125_IsletmelerMigration")]
+    partial class IsletmelerMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,82 +55,6 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .HasName("firmalar_pkey");
 
                     b.ToTable("firmalar", "isletmeler");
-                });
-
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.FirmaTasit", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_date");
-
-                    b.Property<int>("FirmaId")
-                        .HasColumnType("integer")
-                        .HasColumnName("firma_id");
-
-                    b.Property<int>("TasitTipId")
-                        .HasColumnType("integer")
-                        .HasColumnName("tasit_tip_id");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_date");
-
-                    b.HasKey("Id")
-                        .HasName("firma_tasitlar_pkey");
-
-                    b.HasIndex("FirmaId");
-
-                    b.HasIndex("TasitTipId");
-
-                    b.ToTable("firma_tasitlar", "isletmeler");
-                });
-
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.FirmaYetkili", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deleted_date");
-
-                    b.Property<int>("FirmaId")
-                        .HasColumnType("integer")
-                        .HasColumnName("firma_id");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_date");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("firma_yetkililer_pkey");
-
-                    b.HasIndex("FirmaId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("firma_yetkililer", "isletmeler");
                 });
 
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Ilce", b =>
@@ -307,73 +234,6 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.ToTable("ulkeler", "bolgeler");
                 });
 
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
-                });
-
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.YukTip", b =>
                 {
                     b.Property<int>("Id")
@@ -407,48 +267,6 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.ToTable("yuk_tipleri", "envanter");
                 });
 
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.FirmaTasit", b =>
-                {
-                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Firma", "Firma")
-                        .WithMany("FirmaTasits")
-                        .HasForeignKey("FirmaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("firma_firma_tasitlar_fk");
-
-                    b.HasOne("Sevkiyat.Takip.Domain.Entities.TasitTip", "TasitTip")
-                        .WithMany("FirmaTasits")
-                        .HasForeignKey("TasitTipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("tasit_tip_firma_tasitlar_fk");
-
-                    b.Navigation("Firma");
-
-                    b.Navigation("TasitTip");
-                });
-
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.FirmaYetkili", b =>
-                {
-                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Firma", "Firma")
-                        .WithMany("FirmaYetkilis")
-                        .HasForeignKey("FirmaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("firma_firma_yetkili_fk");
-
-                    b.HasOne("Sevkiyat.Takip.Domain.Entities.User", "User")
-                        .WithMany("FirmaYetkilis")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("user_firma_yetkili_fk");
-
-                    b.Navigation("Firma");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Ilce", b =>
                 {
                     b.HasOne("Sevkiyat.Takip.Domain.Entities.Sehir", "Sehir")
@@ -473,31 +291,14 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.Navigation("Ulke");
                 });
 
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Firma", b =>
-                {
-                    b.Navigation("FirmaTasits");
-
-                    b.Navigation("FirmaYetkilis");
-                });
-
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Sehir", b =>
                 {
                     b.Navigation("Ilces");
                 });
 
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.TasitTip", b =>
-                {
-                    b.Navigation("FirmaTasits");
-                });
-
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Ulke", b =>
                 {
                     b.Navigation("Sehirs");
-                });
-
-            modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.User", b =>
-                {
-                    b.Navigation("FirmaYetkilis");
                 });
 #pragma warning restore 612, 618
         }

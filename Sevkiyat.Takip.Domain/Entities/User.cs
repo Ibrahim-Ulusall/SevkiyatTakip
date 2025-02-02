@@ -9,9 +9,12 @@ public class User : IdentityUser<Guid>
     public bool IsActive { get; set; }
     public DateTime CreatedDate { get; set; }
 
+    public virtual ICollection<FirmaYetkili> FirmaYetkilis { get; set; }
     public User() : base()
     {
         CreatedDate = DateTime.Now;
+        FirmaYetkilis = new List<FirmaYetkili>();
         this.TwoFactorEnabled = false;
+
     }
 }

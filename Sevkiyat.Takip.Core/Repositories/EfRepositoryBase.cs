@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace Sevkiyat.Takip.Core.Repositories;
 public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TEntity>, IRepository<TId, TEntity>
-    where TEntity : BaseEntity<TId> where TContext : DbContext, new()
+    where TEntity : BaseEntity<TId> where TContext : DbContext
 
 {
     private readonly TContext _context;
