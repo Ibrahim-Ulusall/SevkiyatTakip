@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.35122.118
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip", "Sevkiyat.Takip\Sevkiyat.Takip.csproj", "{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Core", "Sevkiyat.Takip.Core\Sevkiyat.Takip.Core.csproj", "{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Domain", "Sevkiyat.Takip.Domain\Sevkiyat.Takip.Domain.csproj", "{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Persistance", "Sevkiyat.Takip.Persistance\Sevkiyat.Takip.Persistance.csproj", "{64872F89-0713-4E06-9470-60F7C2EE3D15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Application", "Sevkiyat.Takip.Application\Sevkiyat.Takip.Application.csproj", "{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64872F89-0713-4E06-9470-60F7C2EE3D15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64872F89-0713-4E06-9470-60F7C2EE3D15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64872F89-0713-4E06-9470-60F7C2EE3D15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64872F89-0713-4E06-9470-60F7C2EE3D15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B5F986E5-7A72-4611-A0F4-9B8367BDB528}
+	EndGlobalSection
+EndGlobal
