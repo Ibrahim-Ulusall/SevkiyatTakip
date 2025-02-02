@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip", "Sevkiyat.Takip\Sevkiyat.Takip.csproj", "{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Core", "Sevkiyat.Takip.Core\Sevkiyat.Takip.Core.csproj", "{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Domain", "Sevkiyat.Takip.Domain\Sevkiyat.Takip.Domain.csproj", "{F4DA5406-8A95-4BB4-9B16-CE5C0D155F6A}"
@@ -13,16 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Persistance"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Application", "Sevkiyat.Takip.Application\Sevkiyat.Takip.Application.csproj", "{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sevkiyat.Takip.Web", "Sevkiyat.Takip.Web\Sevkiyat.Takip.Web.csproj", "{7D552645-A54E-4F48-9753-0DA24F556A2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D56A7E9-2A6E-4925-B9DA-1C6317A3B634}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2941BE96-AFBF-46CD-8803-B42C7AEF0A78}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA363C61-4AAD-4D03-A3C9-CD1D9F30DA21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D552645-A54E-4F48-9753-0DA24F556A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D552645-A54E-4F48-9753-0DA24F556A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D552645-A54E-4F48-9753-0DA24F556A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D552645-A54E-4F48-9753-0DA24F556A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
