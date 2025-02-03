@@ -12,12 +12,9 @@ public class IlanTypeCofiguration : IEntityTypeConfiguration<Ilan>
 
         builder.HasKey(i => i.Id).HasName("ilanlar_pkey");
 
-        builder.Property(i => i.AlinacakUlkeId).HasColumnName("alinacak_ulke_id").IsRequired();
-        builder.Property(i => i.AlinacakSehirId).HasColumnName("alinacak_sehir_id").IsRequired();
+        builder.Property(i => i.Id).HasColumnName("id");
         builder.Property(i => i.AlinacakIlceId).HasColumnName("alinacak_ilce_id").IsRequired();
 
-        builder.Property(i => i.TeslimEdilecekUlkeId).HasColumnName("teslim_edilecek_ulke_id").IsRequired();
-        builder.Property(i => i.TeslimEdilecekSehirId).HasColumnName("teslim_edilecek_sehir_id").IsRequired();
         builder.Property(i => i.TeslimEdilecekIlceId).HasColumnName("teslim_edilecek_ilce_id").IsRequired();
 
         builder.Property(i => i.FirmaId).HasColumnName("firma_id").IsRequired();
@@ -33,8 +30,8 @@ public class IlanTypeCofiguration : IEntityTypeConfiguration<Ilan>
         builder.Property(i => i.UpdatedDate).HasColumnName("updated_date");
 
 
-        builder.HasOne(i=> i.KasaTip).WithMany(i=> i.Ilans)
-            .HasForeignKey(i=> i.KasaTipiId)
+        builder.HasOne(i => i.KasaTip).WithMany(i => i.Ilans)
+            .HasForeignKey(i => i.KasaTipiId)
             .HasConstraintName("ilan_kasa_tip_fk")
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -47,38 +44,16 @@ public class IlanTypeCofiguration : IEntityTypeConfiguration<Ilan>
             .HasForeignKey(i => i.TasitTipiId)
             .HasConstraintName("ilan_tasit_tip_fk")
             .OnDelete(DeleteBehavior.Cascade);
-        
-        builder.HasOne(i => i.AlinacakUlke).WithMany(i => i.AlinacakIlans)
-            .HasForeignKey(i => i.AlinacakUlkeId)
-            .HasConstraintName("ilan_alinacak_ulke_fk")
+
+        builder.HasOne(i => i.TeslimEdilecekIlce)
+                .WithMany(i => i.TeslimEdilecekIlans)
+                .HasForeignKey(i => i.TeslimEdilecekIlceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasOne(i => i.AlinacakIlce)
+            .WithMany(ilce => ilce.AlinacakIlans)
+            .HasForeignKey(i => i.AlinacakIlceId)
             .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(i => i.TeslimEdilecekUlke).WithMany(i => i.TeslimEdilecekIlans)
-            .HasForeignKey(i => i.TeslimEdilecekUlkeId)
-            .HasConstraintName("ilan_teslim_edilecek_ulke_fk")
-            .OnDelete(DeleteBehavior.Cascade);
-
-
-        builder.HasOne(i => i.AlinacakSehir).WithMany(i => i.AlinacakIlans)
-            .HasForeignKey(i => i.AlinacakSehirId)
-            .HasConstraintName("ilan_alinacak_sehir_fk")
-            .OnDelete(DeleteBehavior.Cascade);
-
-
-        builder.HasOne(i => i.TeslimEdilecekSehir).WithMany(i => i.TeslimEdilecekIlans)
-            .HasForeignKey(i => i.TeslimEdilecekSehirId)
-            .HasConstraintName("ilan_teslim_edilecek_sehir_fk")
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(i => i.AlinacakIlce).WithMany(i => i.AlinacakIlans)
-           .HasForeignKey(i => i.AlinacakIlceId)
-           .HasConstraintName("ilan_alinacak_ilce_fk")
-           .OnDelete(DeleteBehavior.Cascade);
-
-        builder.HasOne(i => i.TeslimEdilecekIlce).WithMany(i => i.TeslimEdilecekIlans)
-           .HasForeignKey(i => i.TeslimEdilecekIlceId)
-           .HasConstraintName("ilan_teslim_edilecek_ilce_fk")
-           .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasQueryFilter(i => !i.DeletedDate.HasValue);
     }

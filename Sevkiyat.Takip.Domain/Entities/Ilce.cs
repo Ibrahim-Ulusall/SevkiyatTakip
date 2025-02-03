@@ -11,8 +11,8 @@ public class Ilce : BaseEntity<int>
     public virtual ICollection<Ilan> TeslimEdilecekIlans { get; set; }
     public Ilce()
     {
-        AlinacakIlans = new HashSet<Ilan>();
-        TeslimEdilecekIlans = new HashSet<Ilan>();
+        AlinacakIlans = new List<Ilan>();
+        TeslimEdilecekIlans = new List<Ilan>();
     }
     public Ilce(string name, int sehirId, Sehir sehir,ICollection<Ilan> alinacakIlans,
         ICollection<Ilan> teslimEdilecekIlans)

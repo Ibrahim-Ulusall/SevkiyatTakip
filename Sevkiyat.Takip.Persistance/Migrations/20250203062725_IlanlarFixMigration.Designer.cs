@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sevkiyat.Takip.Persistance.Contexts;
@@ -11,9 +12,11 @@ using Sevkiyat.Takip.Persistance.Contexts;
 namespace Sevkiyat.Takip.Persistance.Migrations
 {
     [DbContext(typeof(SevkiyatContext))]
-    partial class SevkiyatContextModelSnapshot : ModelSnapshot
+    [Migration("20250203062725_IlanlarFixMigration")]
+    partial class IlanlarFixMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,8 +137,7 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
+                        .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
@@ -146,6 +148,14 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.Property<int>("AlinacakIlceId")
                         .HasColumnType("integer")
                         .HasColumnName("alinacak_ilce_id");
+
+                    b.Property<int>("AlinacakSehirId")
+                        .HasColumnType("integer")
+                        .HasColumnName("alinacak_sehir_id");
+
+                    b.Property<int>("AlinacakUlkeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("alinacak_ulke_id");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone")
@@ -175,6 +185,14 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("teslim_edilecek_ilce_id");
 
+                    b.Property<int>("TeslimEdilecekSehirId")
+                        .HasColumnType("integer")
+                        .HasColumnName("teslim_edilecek_sehir_id");
+
+                    b.Property<int>("TeslimEdilecekUlkeId")
+                        .HasColumnType("integer")
+                        .HasColumnName("teslim_edilecek_ulke_id");
+
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_date");
@@ -192,6 +210,10 @@ namespace Sevkiyat.Takip.Persistance.Migrations
 
                     b.HasIndex("AlinacakIlceId");
 
+                    b.HasIndex("AlinacakSehirId");
+
+                    b.HasIndex("AlinacakUlkeId");
+
                     b.HasIndex("FirmaId");
 
                     b.HasIndex("KasaTipiId");
@@ -199,6 +221,10 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.HasIndex("TasitTipiId");
 
                     b.HasIndex("TeslimEdilecekIlceId");
+
+                    b.HasIndex("TeslimEdilecekSehirId");
+
+                    b.HasIndex("TeslimEdilecekUlkeId");
 
                     b.HasIndex("YukTipiId");
 
@@ -366,21 +392,11 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_date");
 
-                    b.Property<string>("Kod")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("kod");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
-
-                    b.Property<string>("TelefonKodu")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("telefon_kodu");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
@@ -540,7 +556,22 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .WithMany("AlinacakIlans")
                         .HasForeignKey("AlinacakIlceId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("ilan_alinacak_ilce_fk");
+
+                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Sehir", "AlinacakSehir")
+                        .WithMany("AlinacakIlans")
+                        .HasForeignKey("AlinacakSehirId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("ilan_alinacak_sehir_fk");
+
+                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Ulke", "AlinacakUlke")
+                        .WithMany("AlinacakIlans")
+                        .HasForeignKey("AlinacakUlkeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("ilan_alinacak_ulke_fk");
 
                     b.HasOne("Sevkiyat.Takip.Domain.Entities.Firma", "Firma")
                         .WithMany("Ilans")
@@ -566,7 +597,22 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .WithMany("TeslimEdilecekIlans")
                         .HasForeignKey("TeslimEdilecekIlceId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("ilan_teslim_edilecek_ilce_fk");
+
+                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Sehir", "TeslimEdilecekSehir")
+                        .WithMany("TeslimEdilecekIlans")
+                        .HasForeignKey("TeslimEdilecekSehirId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("ilan_teslim_edilecek_sehir_fk");
+
+                    b.HasOne("Sevkiyat.Takip.Domain.Entities.Ulke", "TeslimEdilecekUlke")
+                        .WithMany("TeslimEdilecekIlans")
+                        .HasForeignKey("TeslimEdilecekUlkeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("ilan_teslim_edilecek_ulke_fk");
 
                     b.HasOne("Sevkiyat.Takip.Domain.Entities.YukTip", "YukTip")
                         .WithMany("Ilans")
@@ -577,6 +623,10 @@ namespace Sevkiyat.Takip.Persistance.Migrations
 
                     b.Navigation("AlinacakIlce");
 
+                    b.Navigation("AlinacakSehir");
+
+                    b.Navigation("AlinacakUlke");
+
                     b.Navigation("Firma");
 
                     b.Navigation("KasaTip");
@@ -584,6 +634,10 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                     b.Navigation("TasitTip");
 
                     b.Navigation("TeslimEdilecekIlce");
+
+                    b.Navigation("TeslimEdilecekSehir");
+
+                    b.Navigation("TeslimEdilecekUlke");
 
                     b.Navigation("YukTip");
                 });
@@ -635,7 +689,11 @@ namespace Sevkiyat.Takip.Persistance.Migrations
 
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Sehir", b =>
                 {
+                    b.Navigation("AlinacakIlans");
+
                     b.Navigation("Ilces");
+
+                    b.Navigation("TeslimEdilecekIlans");
                 });
 
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.TasitTip", b =>
@@ -647,7 +705,11 @@ namespace Sevkiyat.Takip.Persistance.Migrations
 
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.Ulke", b =>
                 {
+                    b.Navigation("AlinacakIlans");
+
                     b.Navigation("Sehirs");
+
+                    b.Navigation("TeslimEdilecekIlans");
                 });
 
             modelBuilder.Entity("Sevkiyat.Takip.Domain.Entities.User", b =>

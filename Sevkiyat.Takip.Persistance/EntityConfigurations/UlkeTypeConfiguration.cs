@@ -15,6 +15,8 @@ public class UlkeTypeConfiguration : IEntityTypeConfiguration<Ulke>
         builder.Property(i => i.Id).HasColumnName("id");
         builder.Property(i => i.Name).HasColumnName("name")
             .HasMaxLength(50).IsRequired();
+        builder.Property(i => i.Kod).HasColumnName("kod").IsRequired();
+        builder.Property(i => i.TelefonKodu).HasColumnName("telefon_kodu").IsRequired();
         builder.Property(i => i.CreatedDate).HasColumnName("created_date").IsRequired();
         builder.Property(i => i.DeletedDate).HasColumnName("deleted_date");
         builder.Property(i => i.UpdatedDate).HasColumnName("updated_date");

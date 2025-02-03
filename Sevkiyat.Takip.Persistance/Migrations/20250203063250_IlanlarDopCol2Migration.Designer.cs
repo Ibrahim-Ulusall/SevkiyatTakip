@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sevkiyat.Takip.Persistance.Contexts;
@@ -11,9 +12,11 @@ using Sevkiyat.Takip.Persistance.Contexts;
 namespace Sevkiyat.Takip.Persistance.Migrations
 {
     [DbContext(typeof(SevkiyatContext))]
-    partial class SevkiyatContextModelSnapshot : ModelSnapshot
+    [Migration("20250203063250_IlanlarDopCol2Migration")]
+    partial class IlanlarDopCol2Migration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,21 +369,11 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("deleted_date");
 
-                    b.Property<string>("Kod")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("kod");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
-
-                    b.Property<string>("TelefonKodu")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("telefon_kodu");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone")
@@ -540,7 +533,8 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .WithMany("AlinacakIlans")
                         .HasForeignKey("AlinacakIlceId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("ilan_alinacak_ilce_fk");
 
                     b.HasOne("Sevkiyat.Takip.Domain.Entities.Firma", "Firma")
                         .WithMany("Ilans")
@@ -566,7 +560,8 @@ namespace Sevkiyat.Takip.Persistance.Migrations
                         .WithMany("TeslimEdilecekIlans")
                         .HasForeignKey("TeslimEdilecekIlceId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("ilan_teslim_edilecek_ilce_fk");
 
                     b.HasOne("Sevkiyat.Takip.Domain.Entities.YukTip", "YukTip")
                         .WithMany("Ilans")
