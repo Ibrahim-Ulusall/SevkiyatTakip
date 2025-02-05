@@ -7,39 +7,32 @@ using System.Reflection;
 namespace Sevkiyat.Takip.Persistance.Extensions;
 public static class PersistanceExtension
 {
-    public static IServiceCollection AddPersistanceDependencyInjection(this IServiceCollection services
+    public static IServiceCollection AddPersistanceLayerDependencyResolvers(this IServiceCollection services
         , IConfiguration configuration)
     {
 
         Assembly assembly = Assembly.GetExecutingAssembly();
 
+        string connectionString = configuration.GetConnectionString("DefaultConnection")
+                                    ?? throw new ArgumentNullException("Connection string not found");
+
         services.AddDbContext<SevkiyatContext>(opt =>
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnection")
-                                        ?? throw new ArgumentNullException("Connection string not found");
-
             opt.UseNpgsql(connectionString);
         });
 
-        services.AddDbContext<UserDbContext>(opt =>
+        var repositoryTypes = assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(i => i.Name == $"I{t.Name}")).ToList();
+
+        foreach (var repo in repositoryTypes)
         {
-            string connectionString = configuration.GetConnectionString("DefaultConnection")
-                                        ?? throw new ArgumentNullException("Connection string not found");
-
-            opt.UseNpgsql(connectionString);
-        });
-
-
-        var repositories = assembly.GetTypes().Where(i => i.IsClass && !i.IsAbstract
-                && i.GetInterfaces().Any(i => i.Name == $"I{i.Name}")).ToList();
-
-        foreach (var repository in repositories)
-        {
-            var interfaces = repository.GetInterfaces().Where(i => i.Name == $"I{i.Name}");
+            var interfaces = repo.GetInterfaces().Where(i => i.Name == $"I{repo.Name}");
             foreach (var @interface in interfaces)
-                services.AddScoped(@interface, repository);
+            {
+                services.AddScoped(@interface, repo);
+            }
         }
 
         return services;
     }
 }
+//scaffold-dbcontext "Host=127.0.0.1;Database=sevkiyat;Username=postgres;Password=postgres;Port=5432" Npgsql.EntityFrameworkCore.PostgreSQL -Context "AppDbContext" -force -contextDir "Contexts" -outputdir "Contexts\Data" -NoOnConfiguring

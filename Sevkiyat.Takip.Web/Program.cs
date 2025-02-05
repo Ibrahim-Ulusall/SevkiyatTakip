@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using Sevkiyat.Takip.Core.Extensions;
 using Sevkiyat.Takip.Core.Models.Settings.Sessions;
-using Sevkiyat.Takip.Domain.Entities;
-using Sevkiyat.Takip.Persistance.Contexts;
 using Sevkiyat.Takip.Persistance.Extensions;
+using Sevkiyat.Takip.Application.Extensions;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddPersistanceDependencyInjection(builder.Configuration);
+builder.Services.AddApplicationLayerDependencyResolvers();
+
+builder.Services.AddPersistanceLayerDependencyResolvers(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -25,15 +26,6 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = sessionSettings.CookieName ?? ".sevkiyat.Session";
     options.Cookie.IsEssential = sessionSettings.IsEssential;
 });
-
-builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
-{
-    options.Password.RequiredLength = 6;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.User.RequireUniqueEmail = true;
-}).AddEntityFrameworkStores<UserDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -93,6 +85,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseCustomExceptionMiddleware();
+
 app.UseCors("SevkiyatCors");
 
 app.UseHttpsRedirection();
@@ -102,6 +96,8 @@ app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

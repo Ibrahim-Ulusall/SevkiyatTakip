@@ -6,26 +6,30 @@ namespace Sevkiyat.Takip.Persistance.EntityConfigurations;
 
 public class FirmaYetkiliTypeCofiguration : IEntityTypeConfiguration<FirmaYetkili>
 {
-    public void Configure(EntityTypeBuilder<FirmaYetkili> builder)
+    public void Configure(EntityTypeBuilder<FirmaYetkili> entity)
     {
-        builder.ToTable("firma_yetkililer", "isletmeler");
+        entity.HasKey(e => e.Id).HasName("firma_yetkililer_pkey");
 
-        builder.HasKey(i => i.Id).HasName("firma_yetkililer_pkey");
+        entity.ToTable("firma_yetkililer", "isletmeler");
 
-        builder.Property(i => i.UserId).HasColumnName("user_id").IsRequired();
-        builder.Property(i => i.FirmaId).HasColumnName("firma_id").IsRequired();
-        builder.Property(i => i.CreatedDate).HasColumnName("created_date").IsRequired();
-        builder.Property(i => i.DeletedDate).HasColumnName("deleted_date");
-        builder.Property(i => i.UpdatedDate).HasColumnName("updated_date");
+        entity.HasIndex(e => e.FirmaId, "IX_firma_yetkililer_firma_id");
 
-        builder.HasOne(i => i.Firma).WithMany(i => i.FirmaYetkilis)
-            .HasForeignKey(i => i.FirmaId).HasConstraintName("firma_firma_yetkili_fk")
-            .OnDelete(DeleteBehavior.Cascade);
+        entity.HasIndex(e => e.UserId, "IX_firma_yetkililer_user_id");
 
-        builder.HasOne(i => i.User).WithMany(i => i.FirmaYetkilis)
-            .HasForeignKey(i => i.UserId).HasConstraintName("user_firma_yetkili_fk")
-            .OnDelete(DeleteBehavior.Cascade);
+        entity.Property(e => e.CreatedDate).HasColumnName("created_date");
+        entity.Property(e => e.DeletedDate).HasColumnName("deleted_date");
+        entity.Property(e => e.FirmaId).HasColumnName("firma_id");
+        entity.Property(e => e.UpdatedDate).HasColumnName("updated_date");
+        entity.Property(e => e.UserId).HasColumnName("user_id");
 
-        builder.HasQueryFilter(i => !i.DeletedDate.HasValue);
+        entity.HasOne(d => d.Firma).WithMany(p => p.FirmaYetkililers)
+            .HasForeignKey(d => d.FirmaId)
+            .HasConstraintName("firma_firma_yetkili_fk");
+
+        entity.HasOne(d => d.User).WithMany(p => p.FirmaYetkililers)
+            .HasForeignKey(d => d.UserId)
+            .HasConstraintName("user_firma_yetkili_fk");
+
+        entity.HasQueryFilter(i => !i.DeletedDate.HasValue);
     }
 }

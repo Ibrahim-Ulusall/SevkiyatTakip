@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Sevkiyat.Takip.Application.Services;
 using Sevkiyat.Takip.Core.Models.Auths;
 using Sevkiyat.Takip.Domain.Entities;
+using Sevkiyat.Takip.Persistance.Contexts;
 
 namespace Sevkiyat.Takip.Web.Controllers.ApiControllers;
 
@@ -12,26 +15,21 @@ namespace Sevkiyat.Takip.Web.Controllers.ApiControllers;
 [ApiController]
 public class AuthsController : ControllerBase
 {
-    private readonly UserManager<User> _userManager;
+    private readonly IUserRepository _userRepository;
 
-    public AuthsController(UserManager<User> userManager)
+    public AuthsController(IUserRepository userRepository)
     {
-        _userManager = userManager;
+        _userRepository = userRepository;
     }
 
     /// <summary>
-    /// Kullanıcıyı login eder.
+    /// Kullanıcıların login olmasını sağlar
     /// </summary>
     /// <param name="login"></param>
     /// <returns></returns>
     [HttpPost("[action]")]
-    public async Task<IActionResult> Login([FromBody] LoginModel login)
+    public async Task<IActionResult> LoginAsync([FromBody] LoginModel login)
     {
-        if (!ModelState.IsValid) 
-            return BadRequest(ModelState);
-
-        var user = await _userManager.FindByNameAsync(login.Username);
-
-        return Ok(user);
+        return Ok(login);
     }
 }

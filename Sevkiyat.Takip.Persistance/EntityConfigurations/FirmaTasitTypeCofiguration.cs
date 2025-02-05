@@ -6,32 +6,30 @@ namespace Sevkiyat.Takip.Persistance.EntityConfigurations;
 
 public class FirmaTasitTypeCofiguration : IEntityTypeConfiguration<FirmaTasit>
 {
-    public void Configure(EntityTypeBuilder<FirmaTasit> builder)
+    public void Configure(EntityTypeBuilder<FirmaTasit> entity)
     {
-        builder.ToTable("firma_tasitlar", "isletmeler");
+        entity.HasKey(e => e.Id).HasName("firma_tasitlar_pkey");
 
-        builder.HasKey(i => i.Id).HasName("firma_tasitlar_pkey");
+        entity.ToTable("firma_tasitlar", "isletmeler");
 
-        builder.Property(i => i.TasitTipId).HasColumnName("tasit_tip_id")
-            .IsRequired();
+        entity.HasIndex(e => e.FirmaId, "IX_firma_tasitlar_firma_id");
 
-        builder.Property(i => i.FirmaId).HasColumnName("firma_id").IsRequired();
-        builder.Property(i => i.CreatedDate).HasColumnName("created_date").IsRequired();
-        builder.Property(i => i.DeletedDate).HasColumnName("deleted_date");
-        builder.Property(i => i.UpdatedDate).HasColumnName("updated_date");
+        entity.HasIndex(e => e.TasitTipId, "IX_firma_tasitlar_tasit_tip_id");
 
-        builder.HasOne(i => i.Firma)
-            .WithMany(i => i.FirmaTasits)
-            .HasForeignKey(i => i.FirmaId)
-            .HasConstraintName("firma_firma_tasitlar_fk")
-            .OnDelete(DeleteBehavior.Cascade);
+        entity.Property(e => e.CreatedDate).HasColumnName("created_date");
+        entity.Property(e => e.DeletedDate).HasColumnName("deleted_date");
+        entity.Property(e => e.FirmaId).HasColumnName("firma_id");
+        entity.Property(e => e.TasitTipId).HasColumnName("tasit_tip_id");
+        entity.Property(e => e.UpdatedDate).HasColumnName("updated_date");
 
-        builder.HasOne(i => i.TasitTip)
-            .WithMany(i => i.FirmaTasits)
-            .HasForeignKey(i => i.TasitTipId)
-            .HasConstraintName("tasit_tip_firma_tasitlar_fk")
-            .OnDelete(DeleteBehavior.Cascade);
+        entity.HasOne(d => d.Firma).WithMany(p => p.FirmaTasitlars)
+            .HasForeignKey(d => d.FirmaId)
+            .HasConstraintName("firma_firma_tasitlar_fk");
 
-        builder.HasQueryFilter(i => !i.DeletedDate.HasValue);
+        entity.HasOne(d => d.TasitTip).WithMany(p => p.FirmaTasitlars)
+            .HasForeignKey(d => d.TasitTipId)
+            .HasConstraintName("tasit_tip_firma_tasitlar_fk");
+
+        entity.HasQueryFilter(i => !i.DeletedDate.HasValue);
     }
 }

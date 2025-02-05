@@ -6,25 +6,28 @@ namespace Sevkiyat.Takip.Persistance.EntityConfigurations;
 
 public class SehirTypeConfiguration : IEntityTypeConfiguration<Sehir>
 {
-    public void Configure(EntityTypeBuilder<Sehir> builder)
+    public void Configure(EntityTypeBuilder<Sehir> entity)
     {
-        builder.ToTable("sehirler", "bolgeler");
+        entity.HasKey(e => e.Id).HasName("sehirler_pkey");
 
-        builder.HasKey(x => x.Id).HasName("sehirler_pkey");
+        entity.ToTable("sehirler", "bolgeler");
 
-        builder.Property(i => i.Id).HasColumnName("id");
-        builder.Property(i => i.Name).HasColumnName("name")
-            .HasMaxLength(50).IsRequired();
-        builder.Property(i => i.UlkeId).HasColumnName("ulke_id").IsRequired();
-        builder.Property(i => i.CreatedDate).HasColumnName("created_date").IsRequired();
-        builder.Property(i => i.DeletedDate).HasColumnName("deleted_date");
-        builder.Property(i => i.UpdatedDate).HasColumnName("updated_date");
+        entity.HasIndex(e => e.UlkeId, "IX_sehirler_ulke_id");
 
-        builder.HasOne(i => i.Ulke).WithMany(i => i.Sehirs).HasForeignKey(i => i.UlkeId)
-            .HasConstraintName("ulke_sehir_fk")
-            .OnDelete(DeleteBehavior.Cascade);
+        entity.Property(e => e.Id).HasColumnName("id");
+        entity.Property(e => e.CreatedDate).HasColumnName("created_date");
+        entity.Property(e => e.DeletedDate).HasColumnName("deleted_date");
+        entity.Property(e => e.Name)
+            .HasMaxLength(50)
+            .HasColumnName("name");
+        entity.Property(e => e.UlkeId).HasColumnName("ulke_id");
+        entity.Property(e => e.UpdatedDate).HasColumnName("updated_date");
 
-        builder.HasQueryFilter(i => !i.DeletedDate.HasValue);
+        entity.HasOne(d => d.Ulke).WithMany(p => p.Sehirlers)
+            .HasForeignKey(d => d.UlkeId)
+            .HasConstraintName("ulke_sehir_fk");
+
+        entity.HasQueryFilter(i => !i.DeletedDate.HasValue);
     }
 }
 

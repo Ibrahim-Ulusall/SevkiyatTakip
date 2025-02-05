@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sevkiyat.Takip.Application\Sevkiyat.Takip.Application.csproj" />
     <ProjectReference Include="..\Sevkiyat.Takip.Persistance\Sevkiyat.Takip.Persistance.csproj" />
   </ItemGroup>
 
