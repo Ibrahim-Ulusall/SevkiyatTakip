@@ -1,6 +1,6 @@
 ﻿using Sevkiyat.Takip.Application.Utilities.Security.JWT;
 
-namespace Sevkiyat.Takip.Application.Models;
+namespace Sevkiyat.Takip.Application.Models.Auths;
 public class LoginResultModel
 {
     public bool Success { get; set; }

@@ -1,9 +1,10 @@
-﻿using Sevkiyat.Takip.Application.Models;
+﻿using Sevkiyat.Takip.Application.Models.Auths;
 using Sevkiyat.Takip.Application.Services;
 using Sevkiyat.Takip.Application.Utilities.Security.Hashing;
 using Sevkiyat.Takip.Application.Utilities.Security.JWT;
 using Sevkiyat.Takip.Application.Validators.Auths;
-using Sevkiyat.Takip.Core.Aspects;
+using Sevkiyat.Takip.Core.Aspects.Security;
+using Sevkiyat.Takip.Core.Aspects.Validation;
 using Sevkiyat.Takip.Core.Models.Auths;
 using Sevkiyat.Takip.Core.Utilities.Helpers;
 using Sevkiyat.Takip.Core.Utilities.Results;
@@ -22,7 +23,7 @@ public class AuthService : IAuthService
         _helper = helper;
     }
 
-    [ValidationAspect(typeof(LoginValidator), Priority = 0)]
+    [ValidationAspect(typeof(LoginValidator), Priority = 2)]
     public async Task<LoginResultModel> Login(LoginModel login)
     {
         LoginResultModel result = new();
@@ -53,66 +54,42 @@ public class AuthService : IAuthService
         return result;
     }
 
+    [SecurityAspect("admin", Priority = 1)]
+    [ValidationAspect(typeof(RegisterValidator))]
     public async Task<IResult> Register(RegisterModel register)
     {
         bool userExists = await _userRepository.AnyAsync(i => i.Email.ToLower() == register.Email.ToLower());
         if (userExists)
             return new ErrorResult(message: "User already exists");
 
-        IResult passwordControl = PasswordControl(register.Password);
 
-        if (passwordControl.Success)
+        string? photo = null;
+
+        if (register.Photo != null)
         {
-            string? photo = null;
-
-            if (register.Photo != null)
-            {
-                var result = await _helper.UploadImage(register.Photo);
-                if (!result.Success)
-                    return result;
-                photo = result.Data;
-            }
-
-
-            HashingHelper.CreatePasswordHash(register.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            User user = new()
-            {
-                FirstName = register.FirstName,
-                LastName = register.LastName,
-                Email = register.Email,
-                Status = true,
-                Photo = photo,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
-            };
-
-            await _userRepository.AddAsync(user);
-
-            return new SuccessResult(message: "User created");
+            var result = await _helper.UploadImage(register.Photo);
+            if (!result.Success)
+                return result;
+            photo = result.Data;
         }
 
-        return passwordControl;
 
-    }
+        HashingHelper.CreatePasswordHash(register.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-    private static IResult PasswordControl(string password, int passwordLength = 8)
-    {
-        if (string.IsNullOrEmpty(password))
-            return new ErrorResult(message: "Password cannot be empty.");
+        User user = new()
+        {
+            FirstName = register.FirstName,
+            LastName = register.LastName,
+            Email = register.Email,
+            Status = true,
+            Photo = photo,
+            PasswordHash = passwordHash,
+            PasswordSalt = passwordSalt
+        };
 
-        if (password.Length < 8)
-            return new ErrorResult(message: "Password length must be at least 8 characters.");
+        await _userRepository.AddAsync(user);
 
-        if (!password.Any(char.IsDigit))
-            return new ErrorResult(message: "The password must contain at least one numeric character.");
+        return new SuccessResult(message: "User created");
 
-        if (!password.Any(char.IsUpper))
-            return new ErrorResult(message: "The password must contain at least one uppercase letter.");
-
-        if (!password.Any(char.IsLower))
-            return new ErrorResult(message: "The password must contain at least one lowercase letter.");
-
-        return new SuccessResult();
     }
 }

@@ -3,7 +3,7 @@ using FluentValidation;
 using Sevkiyat.Takip.Core.Utilities.Interceptors;
 using Sevkiyat.Takip.Core.Utilities.Validation;
 
-namespace Sevkiyat.Takip.Core.Aspects;
+namespace Sevkiyat.Takip.Core.Aspects.Validation;
 
 public class ValidationAspect : MethodInterception
 {

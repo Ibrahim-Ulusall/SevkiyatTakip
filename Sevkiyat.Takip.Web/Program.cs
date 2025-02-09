@@ -7,10 +7,11 @@ using Sevkiyat.Takip.Application.Extensions;
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
-using Autofac.Extras.DynamicProxy;
-using Castle.DynamicProxy;
-using Sevkiyat.Takip.Core.Utilities.Interceptors;
 using Sevkiyat.Takip.Persistance.Modules;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Sevkiyat.Takip.Application.Utilities.Security.Encryption;
+using Microsoft.IdentityModel.Tokens;
+using Sevkiyat.Takip.Application.Utilities.Security.JWT;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,23 @@ builder.Services.AddSession(options =>
     options.Cookie.Name = sessionSettings.CookieName ?? ".sevkiyat.Session";
     options.Cookie.IsEssential = sessionSettings.IsEssential;
 });
+
+var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = tokenOptions!.Issuer,
+            ValidAudience = tokenOptions.Audience,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+        };
+    });
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -97,8 +115,9 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+    app.UseCustomExceptionMiddleware();
 }
-app.UseCustomExceptionMiddleware();
+
 
 app.UseCors("SevkiyatCors");
 

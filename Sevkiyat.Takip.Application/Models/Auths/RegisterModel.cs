@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Sevkiyat.Takip.Application.Models;
+namespace Sevkiyat.Takip.Application.Models.Auths;
 
 public class RegisterModel
 {

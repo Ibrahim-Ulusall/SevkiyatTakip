@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sevkiyat.Takip.Application.Models;
+using Sevkiyat.Takip.Application.Models.Auths;
 using Sevkiyat.Takip.Application.Services;
-using Sevkiyat.Takip.Application.Validators.Auths;
-using Sevkiyat.Takip.Core.Aspects;
 using Sevkiyat.Takip.Core.Models.Auths;
-using Sevkiyat.Takip.Core.Utilities.Validation;
-using System.Configuration;
+using Sevkiyat.Takip.Core.Models.Systems;
 
 namespace Sevkiyat.Takip.Web.Controllers.ApiControllers;
 
@@ -31,6 +28,8 @@ public class AuthsController : ControllerBase
     /// <returns></returns>
     [HttpPost("[action]")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResultModel))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
     public async Task<IActionResult> LoginAsync([FromBody] LoginModel login)
     {
         var loginCheck = await _authService.Login(login);

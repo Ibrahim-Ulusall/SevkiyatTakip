@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Sevkiyat.Takip.Core.Models.Systems;
-using System.Net;
 
 namespace Sevkiyat.Takip.Core.Middlewares;
 public class ExceptionMiddleware
@@ -29,35 +27,69 @@ public class ExceptionMiddleware
     private Task HandleException(HttpContext context, Exception e)
     {
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-        string message = "Internal Server Error";
-
-        if (e.GetType() == typeof(ValidationException))
+        var errorResponse = e switch
         {
-            IEnumerable<ValidationFailure> errors;
-            message = e.Message;
-            context.Response.StatusCode = 400;
-            errors = ((ValidationException)e).Errors;
-            return context.Response.WriteAsync(new ValidationFailureErrors
-            {
-                StatusCode = context.Response.StatusCode,
-                Errors = errors.Select(i => new ValidationExceptionModel
-                {
-                    Property = i.PropertyName,
-                    Error = i.ErrorMessage
-                }).ToList()
-            }.ToString());
+            ValidationException validationException => HandleValidationException(context, validationException),
+            SecurityExceptionModel securityException => HandleSecurityException(context, securityException),
+            BusinessExceptionModel businessException => HandleBusinessException(context, businessException),
+            _ => HandleGenericException(context, e)
+        };
 
-        }
-
-
-        return context.Response.WriteAsync(new ErrorDetail
-        {
-            Message = message,
-            StatusCode = context.Response.StatusCode,
-
-        }.ToString());
-
+        return errorResponse;
     }
+
+    private Task HandleValidationException(HttpContext context, ValidationException e)
+    {
+        context.Response.StatusCode = 400;
+        var errors = e.Errors.Select(i => new ValidationExceptionModel
+        {
+            Property = i.PropertyName,
+            Error = i.ErrorMessage
+        }).ToList();
+
+        var validationFailureErrors = new ValidationFailureErrors
+        {
+            StatusCode = context.Response.StatusCode,
+            Errors = errors
+        };
+
+        return context.Response.WriteAsync(validationFailureErrors.ToString());
+    }
+
+    private Task HandleSecurityException(HttpContext context, SecurityExceptionModel e)
+    {
+        context.Response.StatusCode = 401;
+        var errorDetail = new ErrorDetail
+        {
+            StatusCode = 401,
+            Message = e.Message
+        };
+
+        return context.Response.WriteAsync(errorDetail.ToString());
+    }
+
+    private Task HandleBusinessException(HttpContext context, BusinessExceptionModel e)
+    {
+        context.Response.StatusCode = 400;
+        var errorDetail = new ErrorDetail
+        {
+            StatusCode = 400,
+            Message = e.Message
+        };
+
+        return context.Response.WriteAsync(errorDetail.ToString());
+    }
+
+    private Task HandleGenericException(HttpContext context, Exception e)
+    {
+        var errorDetail = new ErrorDetail
+        {
+            StatusCode = 500,
+            Message = "Internal Server Error"
+        };
+
+        return context.Response.WriteAsync(errorDetail.ToString());
+    }
+
 }

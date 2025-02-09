@@ -1,4 +1,4 @@
-﻿using Sevkiyat.Takip.Application.Models;
+﻿using Sevkiyat.Takip.Application.Models.Auths;
 using Sevkiyat.Takip.Core.Models.Auths;
 using Sevkiyat.Takip.Core.Utilities.Results;
 

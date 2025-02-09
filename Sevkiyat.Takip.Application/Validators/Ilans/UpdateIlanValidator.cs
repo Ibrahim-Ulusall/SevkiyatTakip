@@ -2,10 +2,12 @@
 using Sevkiyat.Takip.Application.Models.Ilans;
 
 namespace Sevkiyat.Takip.Application.Validators.Ilans;
-public class CreateIlanValidator : AbstractValidator<CreateIlanModel>
+
+public class UpdateIlanValidator : AbstractValidator<UpdateIlanModel>
 {
-    public CreateIlanValidator()
+    public UpdateIlanValidator()
     {
+        RuleFor(i => i.Id).NotEmpty().NotNull();
         RuleFor(i => i.AlinacakIlceId).NotNull().NotEmpty();
         RuleFor(i => i.YukTipiId).NotNull().NotEmpty();
         RuleFor(i => i.KasaTipiId).NotNull().NotEmpty();

@@ -13,15 +13,14 @@ public class PersistanceAutofacModule : Autofac.Module
 
         Assembly assembly = Assembly.GetExecutingAssembly();
 
-        var repositoryTypes = assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(i => i.Name == $"I{t.Name}")).ToList();
+        List<Type> repositoryTypes = assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces()
+        .Any(i => i.Name == $"I{t.Name}")).ToList();
 
         foreach (var repo in repositoryTypes)
         {
-            var interfaces = repo.GetInterfaces().Where(i => i.Name == $"I{repo.Name}");
+            IEnumerable<Type> interfaces = repo.GetInterfaces().Where(i => i.Name == $"I{repo.Name}");
             foreach (var @interface in interfaces)
-            {
                 builder.RegisterType(repo).As(@interface).SingleInstance();
-            }
         }
 
         builder.RegisterAssemblyTypes(assembly)
