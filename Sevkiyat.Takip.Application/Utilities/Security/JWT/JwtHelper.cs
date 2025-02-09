@@ -19,7 +19,7 @@ public class JwtHelper : ITokenHelper
                         ?? throw new ArgumentNullException($"{nameof(configuration)} in appsettings.json not found");
     }
 
-    public AccessToken CreateToken(User user, IList<OperationClaim> claims)
+    public AccessToken CreateToken(User user, ICollection<OperationClaim> claims)
     {
         SecurityKey securityKey = SecurityKeyHelper.CreateSecurityKey(_tokenOptions.SecurityKey);
         SigningCredentials signingCredentials = SigningCredentialsHelper.CreateSigningCredentials(securityKey);
@@ -35,7 +35,7 @@ public class JwtHelper : ITokenHelper
         };
     }
 
-    public JwtSecurityToken CreateJwtToken(SigningCredentials signingCredentials, TokenOptions tokenOptions, User user, IList<OperationClaim> operationClaims)
+    public JwtSecurityToken CreateJwtToken(SigningCredentials signingCredentials, TokenOptions tokenOptions, User user, ICollection<OperationClaim> operationClaims)
     {
         JwtSecurityToken token = new JwtSecurityToken(
             audience: tokenOptions.Audience,
@@ -49,7 +49,7 @@ public class JwtHelper : ITokenHelper
         return token;
     }
 
-    public IEnumerable<Claim> SetClaims(User user, IList<OperationClaim> claims)
+    public IEnumerable<Claim> SetClaims(User user, ICollection<OperationClaim> claims)
     {
         IList<Claim> _claims = new List<Claim>();
         _claims.AddNameIdentifier(user.Id.ToString());

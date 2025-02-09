@@ -5,11 +5,19 @@ using Sevkiyat.Takip.Core.Models.Settings.Sessions;
 using Sevkiyat.Takip.Persistance.Extensions;
 using Sevkiyat.Takip.Application.Extensions;
 using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using Autofac.Extras.DynamicProxy;
+using Castle.DynamicProxy;
+using Sevkiyat.Takip.Core.Utilities.Interceptors;
+using Sevkiyat.Takip.Persistance.Modules;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddCoreLayerDependencyResolvers();
 
 builder.Services.AddApplicationLayerDependencyResolvers();
 
@@ -54,7 +62,6 @@ builder.Services.AddSwaggerGen(c =>
         Type = SecuritySchemeType.Http,
         In = ParameterLocation.Header,
         Name = "Authorization"
-
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -62,18 +69,26 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
-
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("SevkiyatCors", policy =>
     {
         policy.WithOrigins("https://localhost:7050",
             "http://localhost:5187", "http://localhost:5187")
-               .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials();
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
     });
 });
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+{
+    containerBuilder.RegisterModule(new PersistanceAutofacModule());
+});
+
+
 
 var app = builder.Build();
 
@@ -81,10 +96,8 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
 app.UseCustomExceptionMiddleware();
 
 app.UseCors("SevkiyatCors");
@@ -108,7 +121,6 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sevkiyat API V1");
     c.RoutePrefix = "api";
 });
-
 
 app.MapControllerRoute(
     name: "default",

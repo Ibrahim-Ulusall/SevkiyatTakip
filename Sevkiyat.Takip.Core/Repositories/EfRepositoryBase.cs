@@ -23,7 +23,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
 
     public TEntity Add(TEntity entity)
     {
-        entity.CreatedDate = DateTime.Now;
+        entity.CreatedDate = DateTime.UtcNow;
         _context.Add(entity);
         _context.SaveChangesAsync();
         return entity;
@@ -31,7 +31,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-        entity.CreatedDate = DateTime.Now;
+        entity.CreatedDate = DateTime.UtcNow;
         await _context.AddAsync(entity);
         await _context.SaveChangesAsync();
         return entity;
@@ -40,7 +40,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
     public IList<TEntity> AddRange(IList<TEntity> entities)
     {
         foreach (TEntity entity in entities)
-            entity.CreatedDate = DateTime.Now;
+            entity.CreatedDate = DateTime.UtcNow;
         _context.AddRange(entities);
         _context.SaveChanges();
         return entities;
@@ -49,7 +49,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
     public async Task<IList<TEntity>> AddRangeAsync(IList<TEntity> entities)
     {
         foreach (TEntity entity in entities)
-            entity.CreatedDate = DateTime.Now;
+            entity.CreatedDate = DateTime.UtcNow;
         await _context.AddRangeAsync(entities);
         await _context.SaveChangesAsync();
         return entities;
@@ -186,7 +186,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
 
     public TEntity Update(TEntity entity)
     {
-        entity.UpdatedDate = DateTime.Now;
+        entity.UpdatedDate = DateTime.UtcNow;
         _context.Update(entity);
         _context.SaveChanges();
         return entity;
@@ -194,7 +194,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
 
     public async Task<TEntity> UpdateAsync(TEntity entity)
     {
-        entity.UpdatedDate = DateTime.Now;
+        entity.UpdatedDate = DateTime.UtcNow;
         _context.Update(entity);
         await _context.SaveChangesAsync();
         return entity;
@@ -203,7 +203,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
     public IList<TEntity> UpdateRange(IList<TEntity> entities)
     {
         foreach (var entity in entities)
-            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedDate = DateTime.UtcNow;
         _context.UpdateRange(entities);
         _context.SaveChanges();
         return entities;
@@ -212,7 +212,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
     public async Task<IList<TEntity>> UpdateRangeAsync(IList<TEntity> entities)
     {
         foreach (var entity in entities)
-            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedDate = DateTime.UtcNow;
         _context.UpdateRange(entities);
         await _context.SaveChangesAsync();
         return entities;
@@ -257,7 +257,7 @@ public class EfRepositoryBase<TId, TEntity, TContext> : IAsyncRepository<TId, TE
         if (entity.DeletedDate.HasValue)
             return;
 
-        entity.DeletedDate = DateTime.Now;
+        entity.DeletedDate = DateTime.UtcNow;
 
         var navigations = _context
             .Entry(entity)
