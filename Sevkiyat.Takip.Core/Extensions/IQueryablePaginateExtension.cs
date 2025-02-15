@@ -6,7 +6,7 @@ public static class IQueryablePaginateExtension
 {
 
     public static async Task<Paginate<T>> ToPaginateAsync<T>(this IQueryable<T> queryable, int index,
-        int size, CancellationToken cancellationToken)
+        int size, CancellationToken cancellationToken = default)
     {
         int count = await queryable.CountAsync(cancellationToken).ConfigureAwait(false);
 

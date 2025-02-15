@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sevkiyat.Takip.Application.Models.Ilans;
+using Sevkiyat.Takip.Application.Models.Firmas;
 using Sevkiyat.Takip.Application.Models.TasitTips;
 using Sevkiyat.Takip.Application.Models.YulTips;
 using Sevkiyat.Takip.Application.Services;
 using Sevkiyat.Takip.Core.Models.Systems;
+using Sevkiyat.Takip.Core.Utilities.Paging;
 using Sevkiyat.Takip.Core.Utilities.Results;
 using IResult = Sevkiyat.Takip.Core.Utilities.Results.IResult;
 
@@ -18,10 +19,13 @@ public class SistemController : ControllerBase
 {
     private readonly ITasitTipRepository _tasitTipiRepository;
     private readonly IYukTipRepository _yukTipRepository;
-    public SistemController(ITasitTipRepository tasitTipiRepository, IYukTipRepository yukTipRepository)
+    private readonly IFirmaRepository _firmaRepository;
+    public SistemController(ITasitTipRepository tasitTipiRepository,
+        IYukTipRepository yukTipRepository, IFirmaRepository firmaRepository)
     {
         _tasitTipiRepository = tasitTipiRepository;
         _yukTipRepository = yukTipRepository;
+        _firmaRepository = firmaRepository;
     }
 
 
@@ -168,4 +172,84 @@ public class SistemController : ControllerBase
         IDataResult<ICollection<GetYukTipModel>> result = await _yukTipRepository.GetAllAsync();
         return Ok(result);
     }
+
+
+    /// <summary>
+    /// Firma Oluşturur.
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost("[action]")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
+    public async Task<IActionResult> CreateFirmaAsync([FromBody] CreateFirmaModel model)
+    {
+        IResult result = await _firmaRepository.CreateAsync(model);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Firma Siler.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpPost("[action]/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
+    public async Task<IActionResult> DeleteFirmaAsync([FromRoute] int id)
+    {
+        IResult result = await _firmaRepository.RemoveAsync(id);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Firma Günceller.
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    [HttpPost("[action]")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IResult))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
+    public async Task<IActionResult> UpdateFirmaAsync([FromBody] UpdateFirmaModel model)
+    {
+        IResult result = await _firmaRepository.EditAsync(model);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Id değeri verilen firmanın detaylarını döner.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("[action]/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IDataResult<FirmaDetayModel>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
+    public async Task<IActionResult> GetFirmaAsync([FromRoute] int id)
+    {
+        IDataResult<FirmaDetayModel> result = await _firmaRepository.GetById(id);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Firmaları listeler.
+    /// </summary>
+    /// <param name="adi"></param>
+    /// <param name="index"></param>
+    /// <param name="size"></param>
+    /// <returns></returns>
+    [HttpGet("[action]")]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Paginate<FirmaDetayModel>))]
+    [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationFailureErrors))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ErrorDetail))]
+    public async Task<IActionResult> GetListFirmaAsync([FromQuery] string? adi, int index = 1, int size = 10)
+    {
+        Paginate<FirmaDetayModel> firmas = await _firmaRepository.GetAllAsync(adi, index, size);
+        return Ok(firmas);
+    }
+
+
 }
