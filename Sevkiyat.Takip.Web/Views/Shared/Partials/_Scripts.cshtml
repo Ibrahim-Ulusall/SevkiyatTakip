@@ -1,0 +1,26 @@
+﻿<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/vendor.min.js"></script>
+<!-- Import Js Files -->
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/simplebar/dist/simplebar.min.js"></script>
+<script src="~/js/theme/app.minisidebar.init.js"></script>
+<script src="~/js/theme/theme.js"></script>
+<script src="~/js/theme/app.min.js"></script>
+<script src="~/js/theme/sidebarmenu.js"></script>
+
+<!-- solar icons -->
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+
+<!-- highlight.js (code view) -->
+<script src="~/js/highlights/highlight.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+
+
+    document.querySelectorAll("pre.code-view > code").forEach((codeBlock) => {
+        codeBlock.textContent = codeBlock.innerHTML;
+    });
+    function handleColorTheme(e) {
+        document.documentElement.setAttribute("data-color-theme", e);
+    }
+</script>

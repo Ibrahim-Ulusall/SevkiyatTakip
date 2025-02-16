@@ -28,4 +28,9 @@
     <ProjectReference Include="..\Sevkiyat.Takip.Persistance\Sevkiyat.Takip.Persistance.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>
